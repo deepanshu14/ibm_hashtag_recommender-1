@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+     
+      <h3> (<a href = "{{ url_for('fetch_result') }}">Add new URL
+         </a>)</h3>
+     <form  role="form" method="post" action="{{ url_for('getdata') }}">
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>URL</th>
+               <th>SELECT</th>>
+            </tr>
+         </thead>
+         <tbody>
+            {% for post in posts %}
+               <tr>
+                  <td>{{ post.id }}</td> 
+                  <td>{{ post.url_ }}</td>
+                  <td><input type="checkbox" name="check" value="{{post.id}}"/>&nbsp;</td>
+                  
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+       
+      <input type="submit" name="submit" value="Do Something">
+      </form>
+      
+   </body>
+</html>

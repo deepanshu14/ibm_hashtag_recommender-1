@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+     
+      <h3> (<a href = "{{ url_for('saveconfig') }}">saveconfig
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               
+               <th>URL</th>
+               <th>WORD COUNT</th>>
+            </tr>
+         </thead>
+         <tbody>
+            {% for r in results %}
+               <tr>
+                  <td>{{ r.url_}}</td> 
+                  <td>{{ r.count }}</td>
+                  
+                  
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+       
+   </body>
+</html>

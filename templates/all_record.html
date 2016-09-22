@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+     
+      <h3> <a href = "{{ url_for('fetch_result') }}"> BACK </a></h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>ID</th>
+               <th>URL</th>
+               
+            </tr>
+         </thead>
+         <tbody>
+             {% for p in range(posts|length) %}
+               <tr>
+                  <td>{{ p+1 }}</td> 
+                  <td>{{ posts[p].url_ }}</td>
+                 
+                  
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+       <form  role="form" method="post" action="{{ url_for('getdata') }}">
+      <input type="submit" name="submit" value="display data">
+      </form>
+
+     <form  role="form" method="post" action="{{ url_for('deleteconfig') }}">
+      <input type="submit" name="submit" value="deleted data">
+      </form>
+   </body>
+</html>
