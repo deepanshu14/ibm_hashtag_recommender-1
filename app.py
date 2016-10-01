@@ -2,15 +2,13 @@
 from flask import Flask,render_template,request,session,url_for,redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
-import urllib2
-import re
-from bs4 import BeautifulSoup
+# import urllib2
 import sys
 import operator
 import re
-import nltk
 from collections import Counter
 import requests
+from try123 import get_image_info
 
 app = Flask(__name__)
 
@@ -20,7 +18,7 @@ app.config.from_object('config.BaseConfig')
 db = SQLAlchemy(app)
 
 
-from scrape_url import call_count   #this imports the module which performs the scraping
+# from scrape_url import call_count   #this imports the module which performs the scraping
 from models import *
 
 
@@ -38,37 +36,40 @@ def fetch_result():
 	errors = []
 	results = {}
 	res = []
-
+	get_det = []
 	if request.method == "POST":
-		
+		st_dict= ""
+		ob_dict = {}
 		try:
 		    url_ = request.form['url']
-		    html = urllib2.urlopen(str(url_)).read()
+		    st_dict,ob_dict = get_image_info(url_)
 		except:
 		    errors.append(
 		        "Unable to get URL. Please make sure it's valid and try again."
 		    )
 		    return render_template('welcome.html', errors=errors)
-		if html:
-			results,raw_word_count = call_count(html)
-			raw_word_count = dict(raw_word_count)
-			
-			try:
-			    result = ScrapePost(
-			        url_=url_,
-			        count=str(raw_word_count)
+		if st_dict:
+			print(st_dict)
+			class_ = ob_dict["images"][0]["classifiers"][0]["classes"][0]["class"]
+			score_ = ob_dict["images"][0]["classifiers"][0]["classes"][0]["score"]
+			get_det.append(class_)
+			get_det.append(score_)
+			# try:
+			#     # result = ScrapePost(
+			#     #     url_=url_,
+			#     #     count=str(raw_word_count)
 			        
-			    )
-			    errors.append("{} have been saved successfully to database. To view the entry press saved button".format(url_))
-			    db.session.add(result)
-			    db.session.commit()
+			#     # )
+			#     errors.append("{} have been saved successfully to database. To view the entry press saved button".format(url_))
+			#     # db.session.add(result)
+			#     # db.session.commit()
 			    
 		        
-			except Exception, e:
-				errors.append("Unable to add item to database.")
+			# except Exception, e:
+			# 	errors.append("Unable to add item to database.")
 
 		
-	return render_template('welcome.html', errors=errors, results=res)
+	return render_template('welcome.html', errors=errors, results=get_det)
 
 
 
@@ -104,7 +105,7 @@ def getdata():
 def deleteconfig():
 	if request.method == "POST":
 		value = request.form.getlist('check') 
-		print value
+		# print value
 		if len(value)==0:
 			return redirect(url_for('deleteconfig'))
 		for v in value:
